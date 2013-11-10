@@ -10,32 +10,28 @@
 # Author:
 #   epinault
 
-var Cheerio = require('cheerio')
+cheerio = require('cheerio')
 
 module.exports = (robot) ->
   robot.respond /devops me/i, (msg) ->
     randevopsMe msg, (url, title) ->
       msg.send title
-      msg.send url
+      msg.send url  
 
 randevopsMe = (msg, cb) ->
   msg.http("http://devopsreactions.tumblr.com/random")
     .get() (err, res, body) ->
-      console.log res.headers.location
       devopsMe msg, res.headers.location, (location, title) ->
         cb location , title
 
 devopsMe = (msg, location, cb) ->
   msg.http(location)
     .get() (err, res, body) ->
-      handler = new HtmlParser.DefaultHandler()
-      parser  = new HtmlParser.Parser handler
 
-      parser.parseComplete body
-      img = Select handler.dom, "#content #left #blog_posts .item_content img"
-      title = Select handler.dom, "#content #left #blog_posts .post_title a"
-      console.log img
-      console.log title[0].children
+      $ = cheerio.load(body)
 
-      cb img[0].attribs.src, title[0].children[0].data
+      img = $('img', 'div[class=item_content]').attr('src')
+      title = $('a', 'div[class=post_title]').text()
+      
+      cb img, title
 
