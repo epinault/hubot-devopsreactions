@@ -14,24 +14,24 @@ cheerio = require('cheerio')
 
 module.exports = (robot) ->
   robot.respond /devops me/i, (msg) ->
-    randevopsMe msg, (url, title) ->
+    randevopsMe robot, (url, title) ->
       msg.send title
       msg.send url  
 
-randevopsMe = (msg, cb) ->
-  msg.http("http://devopsreactions.tumblr.com/random")
+randevopsMe = (robot, cb) ->
+  robot.http("http://devopsreactions.tumblr.com/random")
     .get() (err, res, body) ->
-      devopsMe msg, res.headers.location, (location, title) ->
+      devopsMe robot, res.headers.location, (location, title) ->
         cb location , title
 
-devopsMe = (msg, location, cb) ->
-  msg.http(location)
+devopsMe = (robot, location, cb) ->
+  robot.http(location)
     .get() (err, res, body) ->
 
       $ = cheerio.load(body)
 
       img = $('img', 'div[class=item_content]').attr('src')
       title = $('a', 'div[class=post_title]').text()
-      
+
       cb img, title
 
