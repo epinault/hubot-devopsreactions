@@ -1,7 +1,7 @@
 {
   "name": "hubot-devopsreactions",
   "description": "A hubot plugin/scripts to get funny blog post from http://devopsreactions.tumblr.com/",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Emmanuel Pinault <emmanuel.pinault@gmail.com",
   "license": "MIT",
   "homepage": "https://github.com/epinault/hubot-devopsreactions",
